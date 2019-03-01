@@ -220,9 +220,9 @@ export var njin = (new function NJIN() {
     this.RemoveUpdateScript = fn => remove(nScripts.Update, fn);
     this.RemoveDrawScript = fn => remove(nScripts.Draw, fn);
 
-    this.draw = fn => nScripts.Draw = insert(nScripts.Draw, fn);
-    this.update = fn => nScripts.Update = insert(nScripts.Update, fn);
-    this.setup = fn => nScripts.Setup = insert(nScripts.Setup, fn);
+    this.draw = fn =>   { nScripts.Draw = insert(nScripts.Draw, fn); return fn; };
+    this.update = fn => { nScripts.Update = insert(nScripts.Update, fn); return fn; };
+    this.setup = fn =>  { nScripts.Setup = insert(nScripts.Setup, fn); return fn; };
     
     this.config = cnfg => Object.assign(nConfig, cnfg);
 
