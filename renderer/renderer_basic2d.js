@@ -1,9 +1,6 @@
-import { SetRenderer } from "./renderer.js";
+import { SetRenderer, NO_COLOR } from "./renderer.js";
 
-let r;
-const NO_COLOR = "rgba(0,0,0,0)";
-
-export var RENDERER_BASIC2D = {
+export var RENDERER = {
     // assigned in init
     ctx: null,
     vp: null,
@@ -17,8 +14,8 @@ export var RENDERER_BASIC2D = {
      */
     draw: function(doDraw=true) {
         if (doDraw) {
-            r.ctx.fill();
-            r.ctx.stroke();
+            RENDERER.ctx.fill();
+            RENDERER.ctx.stroke();
         }
     },
 
@@ -28,8 +25,8 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} doDraw - confirms a following draw call
      */
     close: function(doClose=true, doDraw=true) {
-        if (doClose) r.ctx.closePath();
-        r.draw(doDraw);
+        if (doClose) RENDERER.ctx.closePath();
+        RENDERER.draw(doDraw);
     },
 
     /**
@@ -38,11 +35,11 @@ export var RENDERER_BASIC2D = {
      * @param {Vector} cSize - Size of clearing rect
      */
     clear: function(cStart=null, cSize=null) {
-        r.ctx.clearRect(
+        RENDERER.ctx.clearRect(
             (!!cStart) ? cStart.x : 0,
             (!!cStart) ? cStart.y : 0,
-            (!!cSize) ? cSize.x : r.vp.width,
-            (!!cSize) ? cSize.y : r.vp.height
+            (!!cSize) ? cSize.x : RENDERER.vp.width,
+            (!!cSize) ? cSize.y : RENDERER.vp.height
         );
     },
 
@@ -54,8 +51,8 @@ export var RENDERER_BASIC2D = {
      */
     path: function(cStart, doPath=true) {
         if (doPath) {
-            r.ctx.beginPath();
-            r.ctx.moveTo(cStart.x, cStart.y);
+            RENDERER.ctx.beginPath();
+            RENDERER.ctx.moveTo(cStart.x, cStart.y);
         }
     },
 
@@ -67,15 +64,15 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} draw - perform a draw call when complete
      */
     trace: function(coords, beginPath=true, endPath=true, draw=true) {
-        r.path(coords[0], beginPath);
+        RENDERER.path(coords[0], beginPath);
         coords.forEach(
             (coord, index) => {
                 if (index !== 0) {
-                    r.ctx.lineTo(coord.x, coord.y);
+                    RENDERER.ctx.lineTo(coord.x, coord.y);
                 }
             }
         );
-        r.close(endPath, draw);
+        RENDERER.close(endPath, draw);
     },
 
     // lines
@@ -87,9 +84,9 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} draw - perform a draw call when complete
      */
     line: function(cStart, cEnd, beginPath=true, draw=true) {
-        r.path(cStart, beginPath);
-        r.ctx.lineTo(cEnd.x, cEnd.y);
-        r.draw(draw);
+        RENDERER.path(cStart, beginPath);
+        RENDERER.ctx.lineTo(cEnd.x, cEnd.y);
+        RENDERER.draw(draw);
     },
 
     /**
@@ -104,9 +101,9 @@ export var RENDERER_BASIC2D = {
      */
     arc: function(cCenter, rad, start=0, end=Math.PI*2,
                     counterClockwise=null, beginPath=true, draw=true) {
-        if (beginPath) r.ctx.beginPath();
-        r.ctx.arc(cCenter.x, cCenter.y, rad, start, end, counterClockwise);
-        r.draw(draw);
+        if (beginPath) RENDERER.ctx.beginPath();
+        RENDERER.ctx.arc(cCenter.x, cCenter.y, rad, start, end, counterClockwise);
+        RENDERER.draw(draw);
     },
 
     /**
@@ -118,9 +115,9 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} draw - performs a draw call
      */
     quadCurve: function(cStart, cControl, cEnd, beginPath, draw) {
-        r.path(cStart, beginPath);
-        r.ctx.quadraticCurveTo(cControl.x, cControl.y, cEnd.x, cEnd.y);
-        r.draw(draw);
+        RENDERER.path(cStart, beginPath);
+        RENDERER.ctx.quadraticCurveTo(cControl.x, cControl.y, cEnd.x, cEnd.y);
+        RENDERER.draw(draw);
     },
 
     /**
@@ -133,15 +130,15 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} draw - performs a draw call
      */
     bezCurve: function(cStart, cControl1, cControl2, cEnd, beginPath, draw) {
-        r.path(cStart, beginPath);
-        r.ctx.bezierCurveTo(
+        RENDERER.path(cStart, beginPath);
+        RENDERER.ctx.bezierCurveTo(
             cControl1.x,
             cControl1.y,
             cControl2.x,
             cControl2.y,
             cEnd.x,
             cEnd.y);
-        r.draw(draw);
+        RENDERER.draw(draw);
     },
 
     // shapes
@@ -153,9 +150,9 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} draw - perform a draw call when complete
      */
     rect: function(cPos, cSize, beginPath=true, draw=true) {
-        if (beginPath) r.ctx.beginPath();
-        r.ctx.rect(cPos.x, cPos.y, cSize.x, cSize.y);
-        r.draw(draw);
+        if (beginPath) RENDERER.ctx.beginPath();
+        RENDERER.ctx.rect(cPos.x, cPos.y, cSize.x, cSize.y);
+        RENDERER.draw(draw);
     },
 
     /**
@@ -171,9 +168,9 @@ export var RENDERER_BASIC2D = {
      */
     ellipse: function(c, cRad, rot=0, start=0, end=Math.PI*2,
                         counterClockwise=null, beginPath=true, draw=true) {
-        if (beginPath)r.ctx.beginPath();
-        r.ctx.ellipse(c.x, c.y, cRad.x, cRad.y, rot, start, end, counterClockwise);
-        r.draw(draw);
+        if (beginPath)RENDERER.ctx.beginPath();
+        RENDERER.ctx.ellipse(c.x, c.y, cRad.x, cRad.y, rot, start, end, counterClockwise);
+        RENDERER.draw(draw);
     },
 
     /**
@@ -182,7 +179,7 @@ export var RENDERER_BASIC2D = {
      * @param {number} rad - radius of circle
      */
     circle: function(c, rad) {
-        r.arc(c, rad);
+        RENDERER.arc(c, rad);
     },
 
     /**
@@ -191,21 +188,21 @@ export var RENDERER_BASIC2D = {
      * @param {boolean} close - close or leave polygon open after last vertex
      */
     shape: function(coords, close=true) {
-        r.path(coords[0]);
+        RENDERER.path(coords[0]);
         coords.forEach(
             (coord, index) => {
                 if (index !== 0) {
-                    r.ctx.lineTo(coord.x, coord.y);
+                    RENDERER.ctx.lineTo(coord.x, coord.y);
                 }
             }
         );
-        r.close(close, true);
+        RENDERER.close(close, true);
     },
 
     style: function(fill=null, stroke=null, strokeSize=null) {
-        r.ctx.fillStyle = fill||NO_COLOR;
-        r.ctx.strokeStyle = stroke||NO_COLOR;
-        r.ctx.lineWidth = strokeSize||1;
+        RENDERER.ctx.fillStyle = fill||NO_COLOR;
+        RENDERER.ctx.strokeStyle = stroke||NO_COLOR;
+        RENDERER.ctx.lineWidth = strokeSize||1;
     },
 
     init: function() {
@@ -223,13 +220,11 @@ export var RENDERER_BASIC2D = {
         canvas.height = config.height;
         container.append(canvas);
 
-        RENDERER_BASIC2D.vp = canvas;
-        RENDERER_BASIC2D.ctx = canvas.getContext("2d");
-        RENDERER_BASIC2D.w = canvas.width;
-        RENDERER_BASIC2D.h = canvas.height;
+        RENDERER.vp = canvas;
+        RENDERER.ctx = canvas.getContext("2d");
+        RENDERER.w = canvas.width;
+        RENDERER.h = canvas.height;
     }
 }
 
-r = SetRenderer(RENDERER_BASIC2D);
-
-console.log(r.ctx);
+SetRenderer(RENDERER);

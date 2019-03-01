@@ -50,21 +50,20 @@ export var njin = (new function NJIN() {
     function nInit() {
         config_init(nConfig);
         nConfig = window.njin_config;
-        window.njin = njin;
+        //window.njin = njin;
 
-        LoadRenderer();
+        LoadRenderer((r) => {
+            this.r = r;
+            nSetup();
+        });
 
-        let start = Date.now();
-        (function myCheck() {
-            if(!RendererAttached){
-                if( Date.now() - start > nConfig.timeout) console.error("Renderer could not attach!");
-                else setTimeout(myCheck, 5);
-            }
-            else nSetup.apply(njin);
-        }());
+        window.setTimeout(() => {
+            if (!RendererAttached) 
+                console.error("Renderer could not be attached!");
+        }, nConfig.timeout);
     }
 
-    function nSetup() {
+    let nSetup = () => {
         nScripts.Setup.forEach(s => this.invokeSetupScript(s));
         nGameObjectKeys.forEach(k => this.invokeSetupScript(nGameObjects[k].Setup));
         nResume();

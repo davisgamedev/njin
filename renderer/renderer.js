@@ -1,6 +1,6 @@
 export * from "./supp-rend.js";
 
-export const RENDERER = {
+export const RENDERER_INTERFACE = {
     ctx: null,
     vp: null,
 
@@ -31,21 +31,24 @@ export const RENDERER = {
 
 export var RendererAttached = false;
 
-export const RENDERERS = {
+export const RENDERER_TYPE = {
     BASIC2D: "renderer_basic2d.js",
 }
 
-export function SetRenderer(renderer=RENDERER) {
-    renderer.init();
-    window.njin.r = Object.assign(window.njin.r||{}, renderer);
+let rendererCallback;
 
+// called by loaded renderer to set "r" in njin
+export function SetRenderer(renderer=RENDERER_INTERFACE) {
+    renderer.init();
     RendererAttached = true;
-    return window.njin.r;
+    rendererCallback(renderer);
 }
 
-export function LoadRenderer() {
+// called by njin to append correct renderer script
+export function LoadRenderer(setRendererCallback) {
+    rendererCallback = setRendererCallback;
     let script = document.createElement("script");
-    script.src = window.njin_config.path + "renderer/" + RENDERERS[window.njin_config.renderer.type];
+    script.src = window.njin_config.path + "renderer/" + RENDERER_TYPE[window.njin_config.renderer.type];
     script.type = "module";
     document.head.appendChild(script);
 }

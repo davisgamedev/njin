@@ -1,6 +1,8 @@
 import { Vector } from "../lib/vector.js";
 // EXPORTED BY ./RENDERER.JS
 
+export const NO_COLOR = "rgba(0,0,0,0)";
+
 /**
  * @param {number} r - red value
  * @param {number} g - green value (0-255)
