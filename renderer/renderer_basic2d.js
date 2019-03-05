@@ -206,18 +206,13 @@ export var RENDERER = {
     },
 
     init: function() {
-        let config = window.njin_config.renderer;
+        let config = window.njin_config;
         let container = document.getElementById(config.container_id);
-        if (container == null) {
-            container = document.createElement("div");
-            container.id = config.container_id;
-            document.querySelector("body").appendChild(container);
-        }
 
         let canvas = document.createElement("canvas");
         canvas.id = "njin-renderer-canvas";
-        canvas.width = config.width;
-        canvas.height = config.height;
+        canvas.width = config.renderer.width;
+        canvas.height = config.renderer.height;
         container.append(canvas);
 
         RENDERER.vp = canvas;

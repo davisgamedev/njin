@@ -1,11 +1,11 @@
 export const CONFIG_DEFAULTS = {
     tick: 100,
     title: "game",
+    container_id: "njin-container",
     timeout: 3000,
     renderer: {
         width: 1024,
         height: 720,
-        container_id: "njin-container",
         type: "BASIC2D",
     },
     path: "./njin/",
