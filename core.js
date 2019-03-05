@@ -247,7 +247,7 @@ export var njin = (new function NJIN() {
     this.RemoveMousePressed     = fn => remove(nControls.MousePressed, fn);
     this.RemoveMouseReleased    = fn => remove(nControls.MouseReleased, fn);
     this.RemoveMouseUpdate      = fn => remove(nControls.MouseUpdate, fn);
-    this.RemoveMouseDraw        = fn => remove(nControls.MouseDown, fn);
+    this.RemoveMouseDraw        = fn => remove(nControls.MouseDraw, fn);
 
     this.AddSetupScript  = fn => push(nScripts.Setup, fn);
     this.AddUpdateScript = fn => push(nScripts.Update, fn);
