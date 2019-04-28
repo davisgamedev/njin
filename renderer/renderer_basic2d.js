@@ -204,21 +204,78 @@ export var RENDERER = {
         RENDERER.ctx.strokeStyle = stroke||NO_COLOR;
         RENDERER.ctx.lineWidth = strokeSize||1;
     },
+    
+    // layers
+    layer: 0,
+    maxlayers: 1,
+    canvases: [],
+    contexts: [],
+
+    setLayer: function(l) {
+        if (l < 0 || l >= RENDERER.maxlayers) {
+            throw new Error("BAD LAYER INDEX, MUST BE POSITIVE INTEGER LESS THAN " + RENDERER.maxlayers);
+        }
+        else {
+            RENDERER.layer = l;
+            RENDERER.ctx = RENDERER.contexts[l];
+            RENDERER.canvas = RENDERER.canvases[l];
+        }
+    },
 
     init: function() {
         let config = window.njin_config;
         let container = document.getElementById(config.container_id);
 
-        let canvas = document.createElement("canvas");
-        canvas.id = "njin-renderer-canvas";
-        canvas.width = config.renderer.width;
-        canvas.height = config.renderer.height;
-        container.append(canvas);
+        RENDERER.maxlayers = config.renderer.layers;
 
-        RENDERER.vp = canvas;
-        RENDERER.ctx = canvas.getContext("2d");
-        RENDERER.w = canvas.width;
-        RENDERER.h = canvas.height;
+        let style = document.createElement("style");
+        style.type = "text/css";
+        style.innerHTML = `
+            #${config.container_id} canvas {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+            }
+        `;
+        document.head.appendChild(style);
+
+        for(let i = 0; i < config.renderer.layers; i++) {
+
+            let canvas = document.createElement("canvas");
+            canvas.id = "njin-renderer-canvas-"+i;
+            canvas.width = config.renderer.width;
+            canvas.height = config.renderer.height;
+            canvas.style.zIndex = i*100;
+            container.append(canvas);
+    
+            RENDERER.vp = canvas;
+            RENDERER.ctx = canvas.getContext("2d");
+            RENDERER.w = canvas.width;
+            RENDERER.h = canvas.height;
+    
+            RENDERER.canvases.push(canvas);
+            RENDERER.contexts.push(RENDERER.ctx);
+            if (config.renderer.window === "FULL") {
+                // let w = window.innerWidth;
+                // let h = window.innerHeight;
+    
+                // container.style.margin = "auto";
+                // container.style.width = "100%";
+                // container.style.height = "100%";
+    
+                // let c_ratio = RENDERER.w/RENDERER.h;
+                // let w_ratio = w/h;
+    
+                // if (c_ratio > w_ratio) {
+    
+                // }
+                // else {
+    
+                // }
+    
+            }
+        }
+        RENDERER.setLayer(0);
     }
 }
 

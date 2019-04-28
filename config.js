@@ -7,6 +7,8 @@ export const CONFIG_DEFAULTS = {
         width: 1024,
         height: 720,
         type: "BASIC2D",
+        window: "FULL",
+        layers: 1
     },
     path: "./njin/",
 };
